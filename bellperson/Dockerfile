@@ -14,7 +14,8 @@ RUN mkdir /var/run/sshd
 #RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
 # Change password
-RUN echo "root:123456 abm:123456" | chpasswd
+RUN echo "root:123456" | chpasswd
+RUN echo "abm:123456" | chpasswd
 
 # Install Tools
 RUN apt-get install -y apt-utils \
