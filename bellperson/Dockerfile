@@ -19,6 +19,7 @@ RUN echo "abm:123456" | chpasswd
 
 # Install Tools
 RUN apt-get install -y apt-utils \
+       sudo \
        ca-certificates \
        curl \
        gcc \
