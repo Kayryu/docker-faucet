@@ -24,4 +24,9 @@ curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.li
 sudo apt-get update
 
 sudo apt-get install nvidia-container-runtime
+
+sudo apt-get install -y nvidia-docker2
+
+sudo systemctl restart docker
+
 ```
