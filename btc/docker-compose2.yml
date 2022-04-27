@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  node:
+    image: ulamlabs/bitcoind-custom-regtest:latest
+  electrumx:
+    image: lukechilds/electrumx:latest
+    links:
+      - node
+    ports:
+      - "51001:50001"
+      - "51002:50002"
+    environment:
+      - NET=regtest
+      - COIN=BitcoinSegwit
+      - DAEMON_URL=http://test:test@node:19001
+  explorer:
+    image: ulamlabs/btc-rpc-explorer:latest
+    links:
+      - node
+      - electrumx
+    ports:
+      - "3002:3002"
+    environment:
+      - BTCEXP_HOST=0.0.0.0
+      - BTCEXP_BITCOIND_URI=http://test:test@node:19001
+      - BTCEXP_ELECTRUMX_SERVERS=tls://electrumx:50002
+      - BTCEXP_ADDRESS_API=electrumx
+ 

@@ -1,0 +1,41 @@
+version: "3"
+services:
+  bitcoin:
+    image: ruimarinho/bitcoin-core
+    command:
+      - "-printtoconsole"
+      - "-regtest=1"
+      - "-fallbackfee=0.00001"
+      - "-rpcbind=0.0.0.0"
+      - "-rpcallowip=0.0.0.0/0"
+    ports:
+      - 18443:18443
+      - 18444:18444
+    volumes:
+      - ./tmp/bitcoin/.bitcoin/regtest:/home/bitcoin/.bitcoin/regtest
+  electrs:
+    image: safematrix/electrs
+    links:
+      - bitcoin
+    environment:
+      - RUST_LOG=debug 
+    command:
+      - "--daemon-dir=/tmp/bitcoin/.bitcoin"
+      - "--db-dir=/tmp/db"
+      - "--network=regtest"
+      - "--electrum-rpc-addr=0.0.0.0:50001"
+      - "--daemon-rpc-addr=bitcoin:18443"
+      - "--daemon-p2p-addr=bitcoin:18444"
+      - "--cookie-file=/tmp/bitcoin/.bitcoin/regtest/.cookie"
+    ports:
+      - 50001:50001
+    volumes:
+      - ./tmp/db:/tmp/db
+      - ./tmp/bitcoin:/tmp/bitcoin
+volumes:
+  bitcoin:
+    driver: local
+  electrs:
+    driver: local
+  esplora:
+    driver: local
